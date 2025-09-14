@@ -1,10 +1,11 @@
 #pragma once
 #include "input_query.hpp"
 #include <cstdint>
+#include <string>
 class ExpressionHolder {
   public:
     explicit ExpressionHolder(InputQuery inpQuery);
-    void solve();
+    std::string solve_and_return_ans();
 
   private:
     std::int32_t use_oper();

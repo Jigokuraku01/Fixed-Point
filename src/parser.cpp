@@ -31,28 +31,30 @@ InputQuery Parser::parse_input_query(const std::vector<std::string>&& argv) {
     cnt_for_integer = parse_to_int(left, 10);
     cnt_for_fractional = parse_to_int(right, 10);
 
-    std::int32_t cur_rounding_int = parse_to_int(argv[1], 10);
-    switch (cur_rounding_int) {
-        case (0): {
+    if (argv[1].size() != 1) {
+        throw MyException(EXIT_FAILURE,
+                          "Invalid input operation format:" + argv[1]);
+    }
+    switch (argv[1][0]) {
+        case ('0'): {
             cur_rounding = PossibleRounding::TOWARD_ZERO;
             break;
         }
-        case (1): {
+        case ('1'): {
             cur_rounding = PossibleRounding::TOWARD_NEAREST_EVEN;
             break;
         }
-        case (2): {
+        case ('2'): {
             cur_rounding = PossibleRounding::TOWARD_POS_INFINITY;
             break;
         }
-        case (3): {
+        case ('3'): {
             cur_rounding = PossibleRounding::TOWARD_NEG_INFINITY;
             break;
         }
         default: {
             throw MyException(EXIT_FAILURE,
-                              "unknown rounding code: " +
-                                  std::to_string(cur_rounding_int));
+                              "unknown rounding code: " + argv[1]);
         }
     }
 
@@ -95,19 +97,13 @@ InputQuery Parser::parse_input_query(const std::vector<std::string>&& argv) {
 
 std::int32_t Parser::parse_to_int(const std::string& inpStr,
                                   std::int32_t base) {
-    try {
-        std::uint64_t pos = 0;
-        std::uint64_t result = std::stoul(inpStr, &pos, base);
+    std::uint64_t pos = 0;
+    std::uint64_t result = std::stoul(inpStr, &pos, base);
 
-        if (pos != inpStr.size()) {
-            throw std::invalid_argument("Invalid input number format: " +
-                                        inpStr.substr(pos));
-        }
-
-        return static_cast<std::int32_t>(result);
-    }
-    catch (const std::invalid_argument& e) {
+    if (pos != inpStr.size()) {
         throw MyException(EXIT_FAILURE,
-                          "Invalid input number format: " + inpStr);
+                          "Invalid input number format: " + inpStr.substr(pos));
     }
+
+    return static_cast<std::int32_t>(result);
 }

@@ -2,6 +2,7 @@
 #include "input_query.hpp"
 #include "my_exception.hpp"
 #include "parser.hpp"
+#include <cstdlib>
 #include <iostream>
 
 int main(int argc, char** argv) {
@@ -14,14 +15,19 @@ int main(int argc, char** argv) {
         }
         InputQuery inp_query = Parser::parse_input_query(std::move(tmp_vec));
         ExpressionHolder cur_expr_holder = ExpressionHolder{inp_query};
-        cur_expr_holder.solve();
+        std::cout << cur_expr_holder.solve_and_return_ans();
         return 0;
     }
     catch (const MyException& e) {
         std::cerr << e.get_error();
         return e.get_code();
     }
+    catch (const std::exception& e) {
+        std::cerr << e.what();
+        return EXIT_FAILURE;
+    }
     catch (...) {
         std::cerr << "unknown error";
+        return EXIT_FAILURE;
     }
 }

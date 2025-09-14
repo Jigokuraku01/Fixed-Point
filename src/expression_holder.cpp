@@ -2,7 +2,6 @@
 
 #include "input_query.hpp"
 #include "my_exception.hpp"
-#include <iostream>
 #include <string>
 
 ExpressionHolder::ExpressionHolder(InputQuery inpQuery)
@@ -15,7 +14,7 @@ ExpressionHolder::ExpressionHolder(InputQuery inpQuery)
                      _curInpQuery.get_cnt_for_integer() +
                          _curInpQuery.get_cnt_for_fractional())) {
 }
-void ExpressionHolder::solve() {
+std::string ExpressionHolder::solve_and_return_ans() {
     std::int32_t ans = _act_first_number;
     if (_curInpQuery.get_cur_operation() != PossibleOperations::NO_OPER) {
         ans = use_oper();
@@ -26,7 +25,7 @@ void ExpressionHolder::solve() {
         ans_str.insert(0, 4 - ans_str.size(), '0');
     }
     ans_str.insert(ans_str.size() - 3, 1, '.');
-    std::cout << ans_str;
+    return ans_str;
 }
 
 std::int32_t ExpressionHolder::use_oper() {
@@ -55,6 +54,10 @@ std::int32_t ExpressionHolder::use_oper() {
         }
         case PossibleOperations::NO_OPER: {
             throw(MyException(EXIT_FAILURE,
+                              "No operation in 'use operation' method"));
+        }
+        default: {
+            throw(MyException(EXIT_FAILURE,
                               "invalid operation during program work"));
         }
     }
@@ -67,12 +70,12 @@ std::int32_t ExpressionHolder::divide(std::int64_t big_first_numb,
     if (big_second_numb == 0) {
         throw(MyException(EXIT_FAILURE, "div by zero"));
     }
-    if ((big_first_numb < 0 && big_second_numb < 0) ||
-        (big_first_numb > 0 && big_second_numb < 0)) {
+    if (big_second_numb < 0) {
         big_first_numb = -big_first_numb;
         big_second_numb = -big_second_numb;
     }
 
+    big_first_numb <<= _curInpQuery.get_cnt_for_fractional();
     std::int64_t div_tmp_ans = big_first_numb / big_second_numb;
     if (div_tmp_ans * big_first_numb == big_first_numb) {
         return static_cast<std::int32_t>(div_tmp_ans);
@@ -85,7 +88,15 @@ std::int32_t ExpressionHolder::divide(std::int64_t big_first_numb,
             break;
         }
         case (PossibleRounding::TOWARD_NEG_INFINITY): {
-            if (div_tmp_ans > 0) {
+            if (div_tmp_ans == 0) {
+                if (big_first_numb > 0) {
+                    ans = 0;
+                }
+                else {
+                    ans = -1;
+                }
+            }
+            else if (div_tmp_ans > 0) {
                 ans = div_tmp_ans;
             }
             else {
@@ -94,6 +105,14 @@ std::int32_t ExpressionHolder::divide(std::int64_t big_first_numb,
             break;
         }
         case (PossibleRounding::TOWARD_POS_INFINITY): {
+            if (div_tmp_ans == 0) {
+                if (big_first_numb > 0) {
+                    ans = 1;
+                }
+                else {
+                    ans = 0;
+                }
+            }
             if (div_tmp_ans < 0) {
                 ans = div_tmp_ans;
             }
@@ -105,7 +124,7 @@ std::int32_t ExpressionHolder::divide(std::int64_t big_first_numb,
         case (PossibleRounding::TOWARD_NEAREST_EVEN): {
             ans = div_tmp_ans;
             std::int64_t mod = big_first_numb - (big_second_numb * div_tmp_ans);
-            if (div_tmp_ans > 0) {
+            if (big_first_numb > 0) {
 
                 if (mod * 2 > big_second_numb) {
                     ans += 1;
@@ -117,7 +136,10 @@ std::int32_t ExpressionHolder::divide(std::int64_t big_first_numb,
                 }
             }
             else {
-                std::int64_t abs_mod = -mod;
+                std::int64_t abs_mod = mod;
+                if (abs_mod < 0) {
+                    abs_mod = -abs_mod;
+                }
                 if (abs_mod * 2 > big_second_numb) {
                     ans -= 1;
                 }
@@ -163,6 +185,6 @@ std::int32_t cut_number(std::int32_t inpNumber, std::int32_t cnt_bits) {
 
 std::int32_t ExpressionHolder::round_to_bin_and_shift(std::int64_t inpValue,
                                                       std::int32_t cntOfBits) {
-
-    return divide(inpValue, 1LL << cntOfBits);
+    return divide(inpValue,
+                  1LL << (cntOfBits + _curInpQuery.get_cnt_for_fractional()));
 }
