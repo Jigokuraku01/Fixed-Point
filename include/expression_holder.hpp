@@ -20,5 +20,5 @@ class ExpressionHolder {
     std::int32_t _act_second_number;
 };
 
-std::int32_t get_all_ones_at_inp_bit_cnt(std::int32_t inpCnt);
+std::uint32_t get_all_ones_at_inp_bit_cnt(std::int32_t inpCnt);
 std::int32_t cut_number(std::int32_t inpNumber, std::int32_t cnt_bits);

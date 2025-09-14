@@ -16,7 +16,7 @@ ExpressionHolder::ExpressionHolder(InputQuery inpQuery)
                          _curInpQuery.get_cnt_for_fractional())) {
 }
 void ExpressionHolder::solve() {
-    std::int32_t ans = _curInpQuery.get_first_number();
+    std::int32_t ans = _act_first_number;
     if (_curInpQuery.get_cur_operation() != PossibleOperations::NO_OPER) {
         ans = use_oper();
     }
@@ -139,20 +139,24 @@ std::int32_t ExpressionHolder::round_to_dec(std::int32_t inp_value) {
                                   _curInpQuery.get_cnt_for_fractional());
 }
 
-std::int32_t get_all_ones_at_inp_bit_cnt(std::int32_t inpCnt) {
+std::uint32_t get_all_ones_at_inp_bit_cnt(std::int32_t inpCnt) {
     if (inpCnt >= 32) {
-        return ~(static_cast<std::int32_t>(0));
+        return ~(static_cast<std::uint32_t>(0));
     }
-    return (static_cast<std::int32_t>(1) << inpCnt) -
-           static_cast<std::int32_t>(1);
+    return (static_cast<std::uint32_t>(1) << inpCnt) -
+           static_cast<std::uint32_t>(1);
 }
 
 std::int32_t cut_number(std::int32_t inpNumber, std::int32_t cnt_bits) {
 
-    inpNumber = inpNumber & get_all_ones_at_inp_bit_cnt(cnt_bits);
+    inpNumber =
+        static_cast<std::int32_t>(static_cast<std::uint32_t>(inpNumber) &
+                                  get_all_ones_at_inp_bit_cnt(cnt_bits));
     if (inpNumber >> (cnt_bits - 1) != 0) {
-        inpNumber |= get_all_ones_at_inp_bit_cnt(32) -
-                     get_all_ones_at_inp_bit_cnt(cnt_bits);
+        inpNumber =
+            static_cast<std::int32_t>(static_cast<std::uint32_t>(inpNumber) |
+                                      (get_all_ones_at_inp_bit_cnt(32) -
+                                       get_all_ones_at_inp_bit_cnt(cnt_bits)));
     }
     return inpNumber;
 }
