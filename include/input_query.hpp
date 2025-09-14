@@ -20,7 +20,7 @@ class InputQuery {
     InputQuery(std::int32_t cnt_for_integer, std::int32_t cnt_for_fractional,
                std::int32_t first_number,
                PossibleRounding cur_rounding = PossibleRounding::TOWARD_ZERO,
-               bool is_oper_exist = false, std::int32_t second_number = 0,
+               std::int32_t second_number = 0,
                PossibleOperations cur_operation = PossibleOperations::NO_OPER);
 
     [[nodiscard]]
@@ -35,11 +35,8 @@ class InputQuery {
     PossibleOperations get_cur_operation() const noexcept;
     [[nodiscard]]
     PossibleRounding get_cur_rounding() const noexcept;
-    [[nodiscard]]
-    bool is_operation_exist() const noexcept;
 
   private:
-    bool _is_operation_exist;
     std::int32_t _cnt_for_integer;
     std::int32_t _cnt_for_fractional;
     std::int32_t _first_number;
