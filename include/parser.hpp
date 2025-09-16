@@ -8,6 +8,6 @@ class Parser {
     static InputQuery parse_input_query(const std::vector<std::string>&& argv);
 
   private:
-    static std::int32_t parse_to_int(const std::string& inpStr,
-                                     std::int32_t base);
+    static std::int64_t parse_to_int(const std::string& inpStr,
+                                     std::int64_t base);
 };

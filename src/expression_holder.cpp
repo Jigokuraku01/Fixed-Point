@@ -15,21 +15,31 @@ ExpressionHolder::ExpressionHolder(InputQuery inpQuery)
                          _curInpQuery.get_cnt_for_fractional())) {
 }
 std::string ExpressionHolder::solve_and_return_ans() {
-    std::int32_t ans = _act_first_number;
+    std::int64_t ans = _act_first_number;
     if (_curInpQuery.get_cur_operation() != PossibleOperations::NO_OPER) {
         ans = use_oper();
     }
 
-    std::string ans_str = std::to_string(round_to_dec(ans));
-    if (ans_str.size() <= 3) {
-        ans_str.insert(0, 4 - ans_str.size(), '0');
+    std::int64_t dec_ans = round_to_dec(ans);
+    auto abs_ans = dec_ans;
+    if (abs_ans < 0) {
+        abs_ans = -abs_ans;
+    }
+    std::string ans_str = std::to_string(dec_ans);
+    if (std::to_string(abs_ans).size() <= 3) {
+        if (ans_str[0] == '-') {
+            ans_str.insert(1, 5 - ans_str.size(), '0');
+        }
+        else {
+            ans_str.insert(0, 4 - ans_str.size(), '0');
+        }
     }
     ans_str.insert(ans_str.size() - 3, 1, '.');
     return ans_str;
 }
 
-std::int32_t ExpressionHolder::use_oper() {
-    std::int32_t ans;
+std::int64_t ExpressionHolder::use_oper() {
+    std::int64_t ans;
     switch (_curInpQuery.get_cur_operation()) {
         case PossibleOperations::MINUS: {
             ans = _act_first_number - _act_second_number;
@@ -40,16 +50,13 @@ std::int32_t ExpressionHolder::use_oper() {
             break;
         }
         case PossibleOperations::MUL: {
-            std::int64_t tmp_ans =
-                static_cast<std::int64_t>(_act_first_number) *
-                static_cast<std::int64_t>(_act_second_number);
+            std::int64_t tmp_ans = _act_first_number * _act_second_number;
             ans = round_to_bin_and_shift(tmp_ans,
                                          _curInpQuery.get_cnt_for_fractional());
             break;
         }
         case PossibleOperations::DIV: {
-            ans = divide(static_cast<std::int64_t>(_act_first_number),
-                         static_cast<std::int64_t>(_act_second_number));
+            ans = divide(_act_first_number, _act_second_number);
             break;
         }
         case PossibleOperations::NO_OPER: {
@@ -65,8 +72,9 @@ std::int32_t ExpressionHolder::use_oper() {
                                _curInpQuery.get_cnt_for_fractional());
 }
 
-std::int32_t ExpressionHolder::divide(std::int64_t big_first_numb,
-                                      std::int64_t big_second_numb) {
+std::int64_t ExpressionHolder::divide(std::int64_t big_first_numb,
+                                      std::int64_t big_second_numb,
+                                      bool should_shift_numer) {
     if (big_second_numb == 0) {
         throw(MyException(EXIT_FAILURE, "div by zero"));
     }
@@ -75,10 +83,12 @@ std::int32_t ExpressionHolder::divide(std::int64_t big_first_numb,
         big_second_numb = -big_second_numb;
     }
 
-    big_first_numb <<= _curInpQuery.get_cnt_for_fractional();
+    if (should_shift_numer) {
+        big_first_numb <<= _curInpQuery.get_cnt_for_fractional();
+    }
     std::int64_t div_tmp_ans = big_first_numb / big_second_numb;
-    if (div_tmp_ans * big_first_numb == big_first_numb) {
-        return static_cast<std::int32_t>(div_tmp_ans);
+    if (div_tmp_ans * big_second_numb == big_first_numb) {
+        return div_tmp_ans;
     }
     std::int64_t ans;
     switch (_curInpQuery.get_cur_rounding()) {
@@ -113,7 +123,7 @@ std::int32_t ExpressionHolder::divide(std::int64_t big_first_numb,
                     ans = 0;
                 }
             }
-            if (div_tmp_ans < 0) {
+            else if (div_tmp_ans < 0) {
                 ans = div_tmp_ans;
             }
             else {
@@ -152,39 +162,38 @@ std::int32_t ExpressionHolder::divide(std::int64_t big_first_numb,
             break;
         }
     }
-    return static_cast<std::int32_t>(ans);
+    return ans;
 }
 
-std::int32_t ExpressionHolder::round_to_dec(std::int32_t inp_value) {
-    std::int64_t tmp_ans = static_cast<std::int64_t>(inp_value) * 1000;
+std::int64_t ExpressionHolder::round_to_dec(std::int64_t inp_value) {
+    std::int64_t tmp_ans = inp_value * 1000;
     return round_to_bin_and_shift(tmp_ans,
                                   _curInpQuery.get_cnt_for_fractional());
 }
 
-std::uint32_t get_all_ones_at_inp_bit_cnt(std::int32_t inpCnt) {
-    if (inpCnt >= 32) {
-        return ~(static_cast<std::uint32_t>(0));
+std::uint64_t get_all_ones_at_inp_bit_cnt(std::int64_t inpCnt) {
+    if (inpCnt >= 64) {
+        return ~(static_cast<std::uint64_t>(0));
     }
-    return (static_cast<std::uint32_t>(1) << inpCnt) -
-           static_cast<std::uint32_t>(1);
+    return (static_cast<std::uint64_t>(1) << inpCnt) -
+           static_cast<std::uint64_t>(1);
 }
 
-std::int32_t cut_number(std::int32_t inpNumber, std::int32_t cnt_bits) {
+std::int64_t cut_number(std::int64_t inpNumber, std::int64_t cnt_bits) {
 
     inpNumber =
-        static_cast<std::int32_t>(static_cast<std::uint32_t>(inpNumber) &
+        static_cast<std::int64_t>(static_cast<std::uint64_t>(inpNumber) &
                                   get_all_ones_at_inp_bit_cnt(cnt_bits));
     if (inpNumber >> (cnt_bits - 1) != 0) {
         inpNumber =
-            static_cast<std::int32_t>(static_cast<std::uint32_t>(inpNumber) |
-                                      (get_all_ones_at_inp_bit_cnt(32) -
+            static_cast<std::int64_t>(static_cast<std::uint64_t>(inpNumber) |
+                                      (get_all_ones_at_inp_bit_cnt(64) -
                                        get_all_ones_at_inp_bit_cnt(cnt_bits)));
     }
     return inpNumber;
 }
 
-std::int32_t ExpressionHolder::round_to_bin_and_shift(std::int64_t inpValue,
-                                                      std::int32_t cntOfBits) {
-    return divide(inpValue,
-                  1LL << (cntOfBits + _curInpQuery.get_cnt_for_fractional()));
+std::int64_t ExpressionHolder::round_to_bin_and_shift(std::int64_t inpValue,
+                                                      std::int64_t cntOfBits) {
+    return divide(inpValue, 1LL << cntOfBits, false);
 }

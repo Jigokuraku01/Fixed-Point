@@ -4,6 +4,7 @@
 #include "parser.hpp"
 #include <cstdlib>
 #include <iostream>
+#include <string>
 
 int main(int argc, char** argv) {
     try {
@@ -15,7 +16,7 @@ int main(int argc, char** argv) {
         }
         InputQuery inp_query = Parser::parse_input_query(std::move(tmp_vec));
         ExpressionHolder cur_expr_holder = ExpressionHolder{inp_query};
-        std::cout << cur_expr_holder.solve_and_return_ans();
+        std::cout << cur_expr_holder.solve_and_return_ans() << std::endl;
         return 0;
     }
     catch (const MyException& e) {

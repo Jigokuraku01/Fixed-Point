@@ -3,7 +3,6 @@
 #include "input_query.hpp"
 #include "my_exception.hpp"
 #include <cstdlib>
-#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -11,11 +10,11 @@ InputQuery Parser::parse_input_query(const std::vector<std::string>&& argv) {
     if (argv.size() != 3 && argv.size() != 5) {
         throw MyException(EXIT_FAILURE, "Invalid input format");
     }
-    std::int32_t cnt_for_integer;
-    std::int32_t cnt_for_fractional;
-    std::int32_t first_number;
+    std::int64_t cnt_for_integer;
+    std::int64_t cnt_for_fractional;
+    std::int64_t first_number;
     PossibleRounding cur_rounding;
-    std::int32_t second_number = 0;
+    std::int64_t second_number = 0;
     PossibleOperations cur_operation = PossibleOperations::NO_OPER;
 
     const std::string& integer_and_fractional_cnt = argv[0];
@@ -95,15 +94,16 @@ InputQuery Parser::parse_input_query(const std::vector<std::string>&& argv) {
     return ans;
 }
 
-std::int32_t Parser::parse_to_int(const std::string& inpStr,
-                                  std::int32_t base) {
+std::int64_t Parser::parse_to_int(const std::string& inpStr,
+                                  std::int64_t base) {
     std::uint64_t pos = 0;
-    std::uint64_t result = std::stoul(inpStr, &pos, base);
+    std::uint64_t result =
+        std::stoul(inpStr, &pos, static_cast<std::int32_t>(base));
 
     if (pos != inpStr.size()) {
         throw MyException(EXIT_FAILURE,
                           "Invalid input number format: " + inpStr.substr(pos));
     }
 
-    return static_cast<std::int32_t>(result);
+    return static_cast<std::int64_t>(result);
 }
