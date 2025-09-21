@@ -27,7 +27,7 @@
 
 # Описание
 
-## 0. [main.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/main.cpp)
+## 0. [main.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/main.cpp)
 
 Более подробные описания всех классов и методов ниже. Тут лишь примерные слова о том что они делают.
 
@@ -37,8 +37,9 @@
 4. Вызывается метод solve_and_return_ans, который собственно и должен посчитать ответ и вернуть его в виде строки
 
 Важное замечание: Мне показалось более правильным, если при пробрасывании исключения буддут известны как текст ошибки, так и код ошибки, поэтому я написал свой класс MyException.
+Ещё одно важное замечание: Я в лабораторной работе везде с int64, чтобы меньше думать о переполнениях
 
-## 1. [My_exception.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/include/my_exception.hpp) и [My_exception.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/src/my_exception.cpp)
+## 1. [My_exception.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/include/my_exception.hpp) и [My_exception.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/src/my_exception.cpp)
 
 ### Назначение
 
@@ -46,7 +47,7 @@
 
 EXIT_FAILURE это просто define на 1 из cstdlib
 
-## 2. [input_query.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/include/input_query.hpp) и [input_query.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/src/input_query.cpp)
+## 2. [input_query.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/include/input_query.hpp) и [input_query.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/src/input_query.cpp)
 
 ### Назначение
 
@@ -62,7 +63,7 @@ EXIT_FAILURE это просто define на 1 из cstdlib
 Данные при этом тут никак не обрабатываются с точки зрения логики программы(например обрезание входного числа)
 В конструкторе класса значения просто присваиваются полям
 
-## 3. [parser.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/include/parser.hpp) и [parser.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/src/parser.cpp)
+## 3. [parser.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/include/parser.hpp) и [parser.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/src/parser.cpp)
 
 ### Назначение
 
@@ -77,15 +78,15 @@ InputQuery parse_input_query(const std::vector<std::string>&& argv);
 - parse_to_int - этот метод принимает строку и базу СИ, после чего переводит строку в число по данному основанию.
 
 ```C++
-  std::int32_t parse_to_int(const std::string& inpStr, std::int32_t base)
+  std::int64_t parse_to_int(const std::string& inpStr, std::int64_t base)
 ```
 
 Теперь по реализации:
 
 #### parse_to_int
 
-[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/include/parser.hpp#L11)
-[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/src/parser.cpp#L98)
+[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/include/parser.hpp#L11)
+[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/src/parser.cpp#L98)
 
 Использует стандартную функцию std::stoul, которая переводит число из строки в uint64 по нужной базе. \
 
@@ -98,8 +99,8 @@ std::uint64_t result = std::stoul(inpStr, &pos, base);
 
 #### parse_input_query
 
-[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/include/parser.hpp#L8)
-[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/src/parser.cpp#L10)
+[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/include/parser.hpp#L8)
+[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/src/parser.cpp#L10)
 
 Этот метод должен только распарсить данные из строковых в InputQuery. Сначала в нём проверка на количество входных данных. \
 Дальше инициализация переменных(инициализированные инициализированы не случайно. Это на случай если операции нет. Те которые не будут инициализировать ся точно будут посчитаны далее при любом раскладе). \
@@ -134,22 +135,22 @@ else{
 
 После всего этого создаётся InputQuery и возвращается.
 
-## 3. [expression_holder.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/include/expression_holder.hpp) и [expression_holder.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/src/expression_holder.cpp)
+## 3. [expression_holder.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/include/expression_holder.hpp) и [expression_holder.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/src/expression_holder.cpp)
 
 ### Назначение
 
 В этих файлах лежит вся непосредственная логика программы. Т.е. то что будет происходить с данными. \
 
-- get_all_ones_at_inp_bit_cnt - Вспомогательная функция, возвращающая число типа std::uint32, у которого на младших inpCnt(входной параметр) битах единицы
+- get_all_ones_at_inp_bit_cnt - Вспомогательная функция, возвращающая число типа std::uint64, у которого на младших inpCnt(входной параметр) битах единицы
 
 ```C++
-std::uint32_t get_all_ones_at_inp_bit_cnt(std::int32_t inpCnt);
+std::uint64_t get_all_ones_at_inp_bit_cnt(std::int64_t inpCnt);
 ```
 
-- cut_number - принимает число и сколько надо обрезать. Она не просто берёт cnt_bits младших битов, но так же дополняет "обрезанное число" до 32 бит, т.е. множит старший разряд(чтобы было дополнение до 2-x)
+- cut_number - принимает число и сколько надо обрезать. Она не просто берёт cnt_bits младших битов, но так же дополняет "обрезанное число" до 64 бит, т.е. множит старший разряд(чтобы было дополнение до 2-x)
 
 ```C++
-std::int32_t cut_number(std::int32_t inpNumber, std::int32_t cnt_bits);
+std::int64_t cut_number(std::int64_t inpNumber, std::int64_t cnt_bits);
 ```
 
 Самый главный класс этой программы: Expression_Holder. Сначала пройдёмся по полям:
@@ -157,8 +158,8 @@ std::int32_t cut_number(std::int32_t inpNumber, std::int32_t cnt_bits);
 - \_act_first_number и \_act_second_number - это обработанные числа, с которыми и будет работать программа. Обработка в себя включает, например, вышеописанное обрезание и дополнение чисел.
 
 ```C++
-std::int32_t _act_first_number;
-std::int32_t _act_second_number;
+std::int64_t _act_first_number;
+std::int64_t _act_second_number;
 ```
 
 - \_curInpQuery - это просто поле, содержащее пришедшую InputQuery
@@ -179,26 +180,27 @@ std::string solve_and_return_ans();
 - use_oper - применяет операцию, если она есть, и возвращает ответ - число
 
 ```C++
-std::int32_t use_oper();
+std::int64_t use_oper();
 ```
 
 - round_to_dec. Если дробный ответ X, то этот метод должен привести входной аргумент к формату 1000\*X со всеми необходимыми округлениями(1000 \* X по условию целое число)
 
 ```C++
-std::int32_t round_to_dec(std::int32_t inp_value);
+std::int64_t round_to_dec(std::int64_t inp_value);
 ```
 
 - round_to_bin_and_shift - во время лабораторной я довольно часто должен сдвигать число на сколько-то бит вправо и при этом правильно округлять. Это и делает этот метод: сдвигает, округляет и возвращает полученное число
 
 ```C++
-std::int32_t round_to_bin_and_shift(std::int64_t inpValue, std::int32_t cntOfBits);
+std::int64_t round_to_bin_and_shift(std::int64_t inpValue, std::int64_t cntOfBits);
 ```
 
 - divide - как понятно из названия, этот метод делит первое число на второе со всеми необходимыми округлениями и возвращает ответ (Интересный факт, но round_to_bin_and_shift частный случай divide, но я их всё равно разделил т.к. идеологически divide это операция(как + и -), а round_to_bin_and_shift доп. логика программы)
 
 ```C++
-std::int32_t divide(std::int64_t big_first_numb,
-                        std::int64_t big_second_numb);
+std::int64_t divide(std::int64_t big_first_numb,
+                        std::int64_t big_second_numb, 
+                        bool should_shift_numer = true);
 ```
 
 ## Реализация
@@ -207,42 +209,42 @@ std::int32_t divide(std::int64_t big_first_numb,
 
 #### 1. get_all_ones_at_inp_bit_cnt
 
-[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/include/expression_holder.hpp#L24)
-[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/src/expression_holder.cpp#L164)
+[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/include/expression_holder.hpp#L24)
+[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/src/expression_holder.cpp#L164)
 
-Если количество бит на которых должны быть 1 >= 32, можно заметить, что ответ - просто ~0 \
+Если количество бит на которых должны быть 1 >= 64, можно заметить, что ответ - просто ~0 \
 Иначе Можно не боясь переполнения сдвинуть единицу на inpCnt и вычесть единицу
 
 #### 2. cut_number
 
-[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/include/expression_holder.hpp#L25)
-[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/src/expression_holder.cpp#L172)
+[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/include/expression_holder.hpp#L25)
+[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/src/expression_holder.cpp#L172)
 
 Сначала число обрезается, используя get_all_ones_at_inp_bit_cnt. Обрезается просто через битовое "и".
 Потом я хочу дополнить до всего инта(чтобы удобнее работать). В дополнении до 2-х надо просто размножить старший бит. Проверка старшего бита происходит в ифе, и если он 1, то число делает логическое или с единицами от до конца(это просто разность get_all_ones_at_inp_bit_cnt)
 
 ```C++
 inpNumber =
-            static_cast<std::int32_t>(static_cast<std::uint32_t>(inpNumber) |
-                                      (get_all_ones_at_inp_bit_cnt(32) -
+            static_cast<std::int64_t>(static_cast<std::uint64_t>(inpNumber) |
+                                      (get_all_ones_at_inp_bit_cnt(64) -
                                        get_all_ones_at_inp_bit_cnt(cnt_bits)));
 ```
 
-## 3. [ExpressionHolder](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/include/expression_holder.hpp#L5)
+## 3. [ExpressionHolder](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/include/expression_holder.hpp#L5)
 
 Теперь сам класс ExpressionHolder:
 
 ### 1. Конструктор
 
-[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/include/expression_holder.hpp#L7)
-[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/src/expression_holder.cpp#L7)
+[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/include/expression_holder.hpp#L7)
+[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/src/expression_holder.cpp#L7)
 
 Принимает InputQuery и конструирует приватный \_curInpQuery как копию, при этом \_act_first_number и \_act_second_number конструирует как входные числа из InputQuery, обрезанные функцией cut_number
 
 ### 2. solve_and_return_ans
 
-[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/include/expression_holder.hpp#L8)
-[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/src/expression_holder.cpp#L17)
+[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/include/expression_holder.hpp#L8)
+[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/src/expression_holder.cpp#L17)
 
 Записывает в локальную переменную ans \_act_first_number, если есть операция, применяет её, после чего приводит ans к строке стандартной функцией to_string, ставит где нужно точку и нули и возвращает(подробные пояснения про формат будут в round_to_dec)
 
@@ -254,30 +256,29 @@ if (_curInpQuery.get_cur_operation() != PossibleOperations::NO_OPER) {
 
 ### 3. round_to_dec
 
-[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/include/expression_holder.hpp#L12)
-[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/src/expression_holder.cpp#L158)
+[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/include/expression_holder.hpp#L12)
+[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/src/expression_holder.cpp#L158)
 
 Как происходит перевод числа. Пусть дробный ответ X. Этой функции приходит число, которое мы храним в памяти в формате X *(2^(...)). Мы знаем что нужно выводить с 3 знаками после запятой => число X*1000 целое. Моя программа умножает входное число на 1000 и уже после этого сдвигает на степень двойки с необходимым округлением. Т.е. мы получаем верно округлённое число, только умноженное на 1000(именно поэтому нужно было в solve_and_return_ans ставить точку и нули в нужном месте).
 
 ### 4. round_to_bin_and_shift
 
-[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/include/expression_holder.hpp#L13)
-[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/src/expression_holder.cpp#L186)
+[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/include/expression_holder.hpp#L13)
+[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/src/expression_holder.cpp#L186)
 
-Как я писал, это с=частный случай divide, поэтому он просто вызывает divide с нужным делителем. Прибавлять \_curInpQuery.get_cnt_for_fractional() нужно из-за внутренней логики divide(будет написано позже). В кратце это потому что при делении сдвиг сокращается, и чтобы он остался, я сдвигаю числитель. число 1LL << сntOfBits в форме фиксированной точки как раз равно 1LL << (cntOfBits + \_curInpQuery.get_cnt_for_fractional(), поэтому такое деление корректно
+Как я писал, это частный случай divide, поэтому он просто вызывает divide с нужным делителем. Однако тут могла возникнуть проблема, что нужно сдвинуть слишком большое число(например при умножении двух 32 битных чисел может получиться 64 бита). В divide в обычной ситуации я сдвигаю числитель, чтобы получилась корректная форма(об этом немного дальше). Но иногда, как, например, в этом случае, числитель сдвигать не надо. Мне надо просто поделить число как int на степень двойки. Поэтому флаг, отвечающий за сдвиг, равен false
 
 ```C++
-std::int32_t ExpressionHolder::round_to_bin_and_shift(std::int64_t inpValue,
-                                                      std::int32_t cntOfBits) {
-    return divide(inpValue,
-                  1LL << (cntOfBits + _curInpQuery.get_cnt_for_fractional()));
+std::int64_t ExpressionHolder::round_to_bin_and_shift(std::int64_t inpValue,
+                                                      std::int64_t cntOfBits) {
+    return divide(inpValue, 1LL << cntOfBits, false);
 }
 ```
 
 ### 5. use_oper
 
-[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/include/expression_holder.hpp#L11)
-[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/src/expression_holder.cpp#L31)
+[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/include/expression_holder.hpp#L11)
+[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/src/expression_holder.cpp#L31)
 
 Тут пригодится то, что я дополнял число до инта. Благодаря этому я могу работать с входными числами как с обычными интами и всё будет корректно. \
 В use_oper у меня просто switch case:
@@ -291,13 +292,14 @@ std::int32_t ExpressionHolder::round_to_bin_and_shift(std::int64_t inpValue,
 
 ### 5. divide
 
-[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/include/expression_holder.hpp#L16)
-[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/60bdf6a4d591f9bf6660c1581ee109f973688527/src/expression_holder.cpp#L68)
+[.hpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/include/expression_holder.hpp#L16)
+[.cpp](https://github.com/skkv-mathcs/mathcs-ca-25-fixed-point-Jigokuraku01/blob/f2aa0494be6b183f4da5740c34337a1b9a6843cb/src/expression_holder.cpp#L68)
 
 - Сначала проверка что знаменатель не 0
 - Потом я привожу дробное число к стандартной форме(знаменатель >= 0, числитель любого знака)
-- Потом происходит сдвиг. Он нужен вот для чего: нам нужно поделить число X / Y. При этом нам дан инвариант, что мы храним X \* 2 ^ (...) и Y \* 2 ^ (...). Просто поделив первое число на второе, мы получим X/Y, но утратим инвариант. Сдвиги сократятся. Поэтому я подумал сдвинуть X(никаких переполнений не будет, т.к. количество битов в дробной части <= 31, а у нас свободно для сдвига благодаря int64 ещё 32 бита). \
-  Благодаря такому сдвигу я сохраню инвариант и получу валидный ответ
+- Потом происходит сдвиг. Он нужен вот для чего: нам нужно поделить число X / Y. При этом нам дан инвариант, что мы храним X \* 2 ^ (...) и Y \* 2 ^ (...). Просто поделив первое число на второе, мы получим X/Y, но утратим инвариант. Сдвиги сократятся. Поэтому я подумал сдвинуть X(никаких переполнений не будет, т.к. количество битов в дробной части <= 31, а у нас свободно для сдвига благодаря int64 ещё 64 бита). \
+  Благодаря такому сдвигу я сохраню инвариант и получу валидный ответ \
+  Но этот сдвиг не нужно делать при округлении в сдвиге на степень двойки, поэтому я добавил флаг, говорящий нужно ли сделать сдвиг числителя(это костыль чтобы не копипастить код и не было переполнения)
 
 ```C++
  big_first_numb <<= _curInpQuery.get_cnt_for_fractional();
