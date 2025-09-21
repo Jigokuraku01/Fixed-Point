@@ -20,7 +20,12 @@ int main(int argc, char** argv) {
         return 0;
     }
     catch (const MyException& e) {
-        std::cerr << e.get_error();
+        if (e.get_code() != 0) {
+            std::cerr << e.get_error();
+        }
+        else {
+            std::cout << e.get_error();
+        }
         return e.get_code();
     }
     catch (const std::exception& e) {

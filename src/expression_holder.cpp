@@ -76,7 +76,7 @@ std::int64_t ExpressionHolder::divide(std::int64_t big_first_numb,
                                       std::int64_t big_second_numb,
                                       bool should_shift_numer) {
     if (big_second_numb == 0) {
-        throw(MyException(EXIT_FAILURE, "div by zero"));
+        throw(MyException(0, "div by zero"));
     }
     if (big_second_numb < 0) {
         big_first_numb = -big_first_numb;
